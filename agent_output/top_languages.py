@@ -1,7 +1,9 @@
 import json
 import os
 
-# Данные о топ-3 языках программирования
+OUTPUT_DIR = "agent_output"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "top_languages.json")
+
 data = {
     "tiobe": [
         {"name": "Python", "rating": 23.5, "change": "+2.4"},
@@ -15,38 +17,38 @@ data = {
     ],
 }
 
-# 1. Сохранение в JSON
-os.makedirs("agent_output", exist_ok=True)
-with open(os.path.join("agent_output", "top_languages.json"), "w", encoding="utf-8") as f:
+# 1. Save to JSON
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
     json.dump(data, f, indent=4, ensure_ascii=False)
 
-# 2. Вывод красивых таблиц
+# 2. Print table
 def print_table(title, rows):
     headers = ["Язык", "Рейтинг", "Изменение"]
-    # Ширины столбцов: название языка, рейтинг, изменение
-    name_w = max(len(h) for h in ["Язык"] + [str(r["name"]) for r in rows])
-    rating_w = max(len("Рейтинг"), max(len(f"{r['rating']:.1f}") for r in rows))
-    change_w = max(len("Изменение"), max(len(str(r["change"])) for r in rows))
+    widths = [
+        max(len(h) for h in headers),
+        max(len(str(r["rating"])) for r in rows),
+        max(len(str(r["change"])) for r in rows),
+    ]
+    # ensure headers fit
+    widths = [max(w, len(h)) for w, h in zip(widths, headers)]
 
-    border = "+" + "-" * (name_w + 2) + "+" + "-" * (rating_w + 2) + "+" + "-" * (change_w + 2) + "+"
+    border = "+" + "+".join("-" * (w + 2) for w in widths) + "+"
 
+    def line(values):
+        return "| " + " | ".join(str(v).ljust(w) for v, w in zip(values, widths)) + " |"
+
+    # Section title centered
+    total_width = sum(widths) + 3 * 3 + 1  # sum of widths + 3 separators + 1
     print(border)
-    print(f"| {title.center(name_w + rating_w + change_w + 4)} |")
+    print("| " + title.center(total_width - 4) + " |")
     print(border)
-
-    # Шапка
-    print(f"| {'Язык'.ljust(name_w)} | {'Рейтинг'.ljust(rating_w)} | {'Изменение'.ljust(change_w)} |")
+    print(line(headers))
     print(border)
-
-    # Строки данных
     for r in rows:
-        print(
-            f"| {r['name'].ljust(name_w)} | "
-            f"{f'{r['rating']:.1f}'.ljust(rating_w)} | "
-            f"{str(r['change']).ljust(change_w)} |"
-        )
+        print(line([r["name"], r["rating"], r["change"]]))
     print(border)
     print()
 
-print_table("TIOBE Index — Top 3", data["tiobe"])
-print_table("PYPL Index — Top 3", data["pypl"])
+print_table("TIOBE", data["tiobe"])
+print_table("PYPL", data["pypl"])
