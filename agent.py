@@ -8,13 +8,13 @@ from tools import execute_subagent_tool
 # Загрузка конфига
 CONFIG_PATH = BASE_DIR / "config.json"
 if not CONFIG_PATH.exists():
-    console.print(f"[red]❌ Не найден {CONFIG_PATH}[/]")
+    console.print(f"[red]Не найден {CONFIG_PATH}[/]")
     exit(1)
 
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = json.load(f)
 
-console.print(f"[green]✅ Конфиг загружен: {CONFIG_PATH}[/]")
+console.print(f"[green]Конфиг загружен: {CONFIG_PATH}[/]")
 
 # Определение инструментов для субагентов (остаются в коде, так как связаны с логикой)
 AGENT_TOOLS = {

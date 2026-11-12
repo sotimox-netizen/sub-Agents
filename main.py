@@ -3,7 +3,7 @@ from rich.panel import Panel
 from rich.markdown import Markdown
 from agent import run_agent_loop, SUBAGENTS
 from memory import session_history
-print("версия 1.1")
+print("версия 1.2")
 
 console = Console()
 

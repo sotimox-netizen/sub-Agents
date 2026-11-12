@@ -16,7 +16,7 @@ try:
         messages=[{"role": "user", "content": "Скажи 'Работает!'"}],
         max_tokens=10
     )
-    print(f"✅ УСПЕХ! Ответ: {r.choices[0].message.content}")
+    print(f"УСПЕХ! Ответ: {r.choices[0].message.content}")
 except Exception as e:
-    print(f"❌ ОШИБКА: {e}")
+    print(f"ОШИБКА: {e}")
     print("Проверь, точно ли модель называется 'deepseek-v4-pro' в твоем лоте.")
