@@ -1,6 +1,7 @@
 import json
 import time
 from pathlib import Path
+from duckduckgo_search import DDGS
 from config import (
     console, BASE_DIR, FORBIDDEN_PATTERNS,
     MAX_FILE_SIZE, MAX_FILE_READ_CHARS, MAX_DIR_LIST_CHARS
@@ -8,7 +9,6 @@ from config import (
 
 
 def is_safe_path(path: Path) -> tuple[bool, str]:
-    """Проверяет, безопасен ли путь для доступа."""
     try:
         resolved = path.resolve()
         if BASE_DIR not in resolved.parents and resolved != BASE_DIR:
@@ -22,13 +22,18 @@ def is_safe_path(path: Path) -> tuple[bool, str]:
 
 
 def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: dict):
-    """Выполняет инструмент субагента."""
     agent = subagents[agent_id]
     console.print(f"    [dim]⚙️  [{agent['color']}]{tool_name}()[/]")
 
+    from duckduckgo_search import DDGS
+
     if tool_name == "search_web":
-        time.sleep(0.3)
-        return {"result": f"Найдено по запросу: {args.get('query', '')}"}
+        try:
+            with DDGS() as ddgs:
+                results = list(ddgs.text(args.get('query', ''), max_results=5))
+                return {"result": "\n".join([f"{r['title']}: {r['body']}" for r in results])}
+        except Exception as e:
+            return {"error": str(e)}
 
     elif tool_name == "execute_code":
         try:

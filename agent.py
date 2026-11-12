@@ -1,9 +1,9 @@
 import json
 import time
+from pathlib import Path
 from config import console, client, BASE_DIR, MAX_TOOL_RESULT_CHARS, MAX_SUB_RESULT_CHARS, MAX_HISTORY_TURNS
 from memory import session_history, clip, trim_working_messages
 from tools import execute_subagent_tool
-
 
 # Загрузка конфига
 CONFIG_PATH = BASE_DIR / "config.json"
@@ -14,127 +14,114 @@ if not CONFIG_PATH.exists():
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = json.load(f)
 
-console.print(f"[green]Конфиг загружен: {CONFIG_PATH}[/]")
+console.print(f"[green]✅ Конфиг загружен: {CONFIG_PATH}[/]")
 
-from pathlib import Path
-from openai import OpenAI
-
-key = Path.home().joinpath("Documents", "blablabla.txt").read_text().strip()
-print(f"Ключ: {key[:5]}...{key[-4:]}")
-
-client = OpenAI(api_key=key, base_url="https://api.aikeysforyou.com/v1")
-
-
-# Определение субагентов
-SUBAGENTS = {
-    "researcher": {
-        "name": "Исследователь",
-        "color": "green",
-        "system_prompt": "Ты — исследователь. Находи факты и информацию по теме. Используй инструмент search_web. Отвечай кратко и по делу.",
-        "tools": [
-            {
-                "type": "function",
-                "function": {
-                    "name": "search_web",
-                    "description": "Поиск информации в интернете",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "query": {"type": "string", "description": "Поисковый запрос"}
-                        },
-                        "required": ["query"]
-                    }
+# Определение инструментов для субагентов (остаются в коде, так как связаны с логикой)
+AGENT_TOOLS = {
+    "researcher": [
+        {
+            "type": "function",
+            "function": {
+                "name": "search_web",
+                "description": "Поиск информации в интернете",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string", "description": "Поисковый запрос"}
+                    },
+                    "required": ["query"]
                 }
             }
-        ]
-    },
-    "coder": {
-        "name": "Программист",
-        "color": "yellow",
-        "system_prompt": "Ты — программист на Python. Пиши код короткими блоками. Используй list_directory и read_file для изучения проекта, save_to_file для сохранения, execute_code для проверки. Если задача большая — разбей на шаги.",
-        "tools": [
-            {
-                "type": "function",
-                "function": {
-                    "name": "list_directory",
-                    "description": "Показывает содержимое директории проекта. Для корня передай path='.'",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "path": {"type": "string", "description": "Относительный путь, например '.' или 'agent_output'"}
-                        },
-                        "required": ["path"]
-                    }
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    "name": "read_file",
-                    "description": "Читает содержимое текстового файла из проекта.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "path": {"type": "string", "description": "Относительный путь к файлу"}
-                        },
-                        "required": ["path"]
-                    }
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    "name": "save_to_file",
-                    "description": "Сохраняет код в файл внутри папки agent_output.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "filename": {"type": "string", "description": "Имя файла с расширением .py"},
-                            "code": {"type": "string", "description": "Полный код для сохранения"}
-                        },
-                        "required": ["filename", "code"]
-                    }
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    "name": "execute_code",
-                    "description": "Выполняет Python код и возвращает результат.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "code": {"type": "string", "description": "Python код для выполнения"}
-                        },
-                        "required": ["code"]
-                    }
+        }
+    ],
+    "coder": [
+        {
+            "type": "function",
+            "function": {
+                "name": "list_directory",
+                "description": "Показывает содержимое директории проекта. Для корня передай path='.'",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string", "description": "Относительный путь, например '.' или 'agent_output'"}
+                    },
+                    "required": ["path"]
                 }
             }
-        ]
-    },
-    "writer": {
-        "name": "Писатель",
-        "color": "magenta",
-        "system_prompt": "Ты — писатель. Превращаешь сырые данные и код в красивый структурированный текст. Не используй инструменты, просто пиши.",
-        "tools": []
-    }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "read_file",
+                "description": "Читает содержимое текстового файла из проекта.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string", "description": "Относительный путь к файлу"}
+                    },
+                    "required": ["path"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "save_to_file",
+                "description": "Сохраняет код в файл внутри папки agent_output.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filename": {"type": "string", "description": "Имя файла с расширением .py"},
+                        "code": {"type": "string", "description": "Полный код для сохранения"}
+                    },
+                    "required": ["filename", "code"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "execute_code",
+                "description": "Выполняет Python код и возвращает результат.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "code": {"type": "string", "description": "Python код для выполнения"}
+                    },
+                    "required": ["code"]
+                }
+            }
+        }
+    ],
+    "writer": []
 }
+
+# Формируем SUBAGENTS из конфига + инструментов
+SUBAGENTS = {}
+for agent_id, agent_config in CONFIG.get("agents", {}).items():
+    SUBAGENTS[agent_id] = {
+        "name": agent_config.get("name", agent_id),
+        "color": agent_config.get("color", "blue"),
+        "system_prompt": agent_config.get("system_prompt", ""),
+        "tools": AGENT_TOOLS.get(agent_id, [])
+    }
+
+console.print(f"[green]Загружено агентов: {len(SUBAGENTS)}[/]")
 
 
 def create_completion_with_retry(max_retries=5, **kwargs):
-    """Отправляет запрос с retry при rate limit."""
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(**kwargs)
             if hasattr(response, 'usage'):
-                console.print(f"    [dim]📊 Токенов: {response.usage.total_tokens}[/]")
+                console.print(f"    [dim]Токенов: {response.usage.total_tokens}[/]")
             return response
         except Exception as e:
             err = str(e)
             if "429" in err or "rate limit" in err.lower():
                 if attempt < max_retries - 1:
                     wait = 60
-                    console.print(f"    [yellow]⏳ Rate limit, ждём {wait}с...[/]")
+                    console.print(f"    [yellow]Rate limit, ждём {wait}с...[/]")
                     time.sleep(wait)
                     continue
             raise
@@ -162,7 +149,6 @@ def _build_supervisor_tools():
 
 
 def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth: int = 0) -> str:
-    """Основной цикл агента."""
     agent = SUBAGENTS.get(agent_id)
     indent = "  " * depth
     color = agent["color"] if agent else "blue"
@@ -227,7 +213,6 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
                 })
                 continue
 
-            # === ПРОВЕРКА: существует ли инструмент? ===
             available_tools = [t["function"]["name"] for t in tools]
             if fn_name not in available_tools:
                 error_msg = (
@@ -241,30 +226,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
                     "content": json.dumps({"error": error_msg}, ensure_ascii=False)
                 })
                 continue
-            # === КОНЕЦ ПРОВЕРКИ ===
 
-            if is_supervisor and fn_name.startswith("delegate_to_"):
-                sub_id = fn_name.replace("delegate_to_", "")
-                if sub_id not in SUBAGENTS:
-                    working_messages.append({
-                        "role": "tool", "tool_call_id": tc.id,
-                        "content": json.dumps({"error": f"Агент '{sub_id}' не существует"}, ensure_ascii=False)
-                    })
-                    continue
-                sub_task = fn_args.get("task", "")
-                console.print(f"{indent}  [dim cyan]Делегирование → {SUBAGENTS[sub_id]['name']}[/]")
-                sub_result = run_agent_loop(sub_id, sub_task, is_supervisor=False, depth=depth + 1)
-                working_messages.append({
-                    "role": "tool", "tool_call_id": tc.id,
-                    "content": clip(sub_result, MAX_SUB_RESULT_CHARS)
-                })
-            else:
-                result = execute_subagent_tool(agent_id, fn_name, fn_args, SUBAGENTS)
-                payload = json.dumps(result, ensure_ascii=False)
-                working_messages.append({
-                    "role": "tool", "tool_call_id": tc.id,
-                    "content": clip(payload, MAX_TOOL_RESULT_CHARS)
-                })
             if is_supervisor and fn_name.startswith("delegate_to_"):
                 sub_id = fn_name.replace("delegate_to_", "")
                 if sub_id not in SUBAGENTS:
