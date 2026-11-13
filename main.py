@@ -9,8 +9,8 @@ console = Console()
 
 
 if __name__ == "__main__":
-    console.print(Panel.fit("Мультиагентный оркестратор", border_style="white"))
-    console.print("Команды: 'выход' — закрыть, '/reset' — очистить контекст")
+    console.print("Мультиагентный оркестратор", markup=False)
+    console.print("Команды: 'выход' — закрыть, '/reset' — очистить контекст" , markup=False)
 
     while True:
         try:
@@ -30,7 +30,7 @@ if __name__ == "__main__":
             console.print(Panel(Markdown(final), title="ОТЧЁТ", border_style="green"))
 
         except KeyboardInterrupt:
-            console.print("\nПрервано")
+            console.print("\nПрервано", markup=False)
             break
         except Exception as e:
             console.print(f"Ошибка: {e}", markup=False)

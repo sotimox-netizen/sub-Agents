@@ -1,7 +1,7 @@
 import json
 import time
 from pathlib import Path
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from config import (
     console, BASE_DIR, FORBIDDEN_PATTERNS,
     MAX_FILE_SIZE, MAX_FILE_READ_CHARS, MAX_DIR_LIST_CHARS
@@ -25,7 +25,6 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
     agent = subagents[agent_id]
     console.print(f"    [dim][{agent['color']}]{tool_name}()[/]")
 
-    from duckduckgo_search import DDGS
 
     if tool_name == "search_web":
         try:

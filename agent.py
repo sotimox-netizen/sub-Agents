@@ -14,7 +14,7 @@ if not CONFIG_PATH.exists():
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = json.load(f)
 
-console.print(f"Конфиг загружен: {CONFIG_PATH}")
+console.print(f"Конфиг загружен: {CONFIG_PATH} ", markup=False)
 
 AGENT_TOOLS = {
     "researcher": [
@@ -104,7 +104,7 @@ for agent_id, agent_config in CONFIG.get("agents", {}).items():
         "tools": AGENT_TOOLS.get(agent_id, [])
     }
 
-console.print(f"Загружено агентов: {len(SUBAGENTS)}")
+console.print(f"Загружено агентов: {len(SUBAGENTS)}", markup=False)
 
 
 def create_completion_with_retry(max_retries=5, **kwargs):
@@ -112,7 +112,7 @@ def create_completion_with_retry(max_retries=5, **kwargs):
         try:
             response = client.chat.completions.create(**kwargs)
             if hasattr(response, 'usage'):
-                console.print(f"Токенов: {response.usage.total_tokens}[/]")
+                console.print(f"Токенов: {response.usage.total_tokens}", markup=False)
             return response
         except Exception as e:
             err = str(e)
@@ -133,7 +133,7 @@ def _build_supervisor_tools():
             "type": "function",
             "function": {
                 "name": f"delegate_to_{agent_id}",
-                "description": f"Делегировать задачу агенту '{cfg['name']}'. {cfg['system_prompt'][:120]}",
+                "description": f"Делегировать задачу агенту '{cfg['name']}'. {cfg['system_prompt'][:500]}",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -161,7 +161,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
         working_messages.extend(session_history)
         working_messages.append({"role": "user", "content": task})
         if session_history:
-            console.print(f"{indent}[dim]Диалогов в сессии: {len(session_history) // 2}[/]")
+            console.print(f"{indent}Диалогов в сессии: {len(session_history) // 2}", markup=False)
     else:
         working_messages = [
             {"role": "system", "content": agent["system_prompt"] if agent else ""},
@@ -218,7 +218,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
                     f"Доступные инструменты: {', '.join(available_tools)}. "
                     f"Используй только их."
                 )
-                console.print(f"{indent}    [red]⚠️  {error_msg}[/]")
+                console.print(f"{indent}    [red]{error_msg}[/]")
                 working_messages.append({
                     "role": "tool", "tool_call_id": tc.id,
                     "content": json.dumps({"error": error_msg}, ensure_ascii=False)
@@ -234,7 +234,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
                     })
                     continue
                 sub_task = fn_args.get("task", "")
-                console.print(f"{indent}  [dim cyan]Делегирование → {SUBAGENTS[sub_id]['name']}[/]")
+                console.print(f"{indent}  Делегирование → {SUBAGENTS[sub_id]['name']}", markup=False)
                 sub_result = run_agent_loop(sub_id, sub_task, is_supervisor=False, depth=depth + 1)
                 working_messages.append({
                     "role": "tool", "tool_call_id": tc.id,

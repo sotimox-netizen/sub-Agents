@@ -1,18 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
+from PyInstaller.utils.hooks import collect_submodules
 
-datas = []
-binaries = []
-hiddenimports = ['openai', 'rich', 'httpx', 'anyio', 'duckduckgo_search']
-tmp_ret = collect_all('duckduckgo_search')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+hiddenimports = ['openai', 'rich', 'httpx', 'anyio']
+hiddenimports += collect_submodules('ddgs')
 
 
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=binaries,
-    datas=datas,
+    binaries=[],
+    datas=[],
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},

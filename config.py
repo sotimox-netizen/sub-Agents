@@ -44,4 +44,4 @@ FORBIDDEN_PATTERNS = [
     ".idea",
 ]
 
-console.print(f"[green]API ключ загружен[/]")
+console.print(f"API ключ загружен", markup=False)
