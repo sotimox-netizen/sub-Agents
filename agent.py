@@ -169,7 +169,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
         ]
 
     tools = _build_supervisor_tools() if is_supervisor else (agent["tools"] if agent else [])
-    max_iter = 8 if is_supervisor else 5
+    max_iter = 8 if is_supervisor else 8
 
     for i in range(max_iter):
         working_messages = trim_working_messages(working_messages)
