@@ -14,9 +14,8 @@ if not CONFIG_PATH.exists():
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     CONFIG = json.load(f)
 
-console.print(f"[green]Конфиг загружен: {CONFIG_PATH}[/]")
+console.print(f"Конфиг загружен: {CONFIG_PATH}")
 
-# Определение инструментов для субагентов (остаются в коде, так как связаны с логикой)
 AGENT_TOOLS = {
     "researcher": [
         {
@@ -96,7 +95,6 @@ AGENT_TOOLS = {
     "writer": []
 }
 
-# Формируем SUBAGENTS из конфига + инструментов
 SUBAGENTS = {}
 for agent_id, agent_config in CONFIG.get("agents", {}).items():
     SUBAGENTS[agent_id] = {
@@ -106,7 +104,7 @@ for agent_id, agent_config in CONFIG.get("agents", {}).items():
         "tools": AGENT_TOOLS.get(agent_id, [])
     }
 
-console.print(f"[green]Загружено агентов: {len(SUBAGENTS)}[/]")
+console.print(f"Загружено агентов: {len(SUBAGENTS)}")
 
 
 def create_completion_with_retry(max_retries=5, **kwargs):
@@ -114,14 +112,14 @@ def create_completion_with_retry(max_retries=5, **kwargs):
         try:
             response = client.chat.completions.create(**kwargs)
             if hasattr(response, 'usage'):
-                console.print(f"    [dim]Токенов: {response.usage.total_tokens}[/]")
+                console.print(f"Токенов: {response.usage.total_tokens}[/]")
             return response
         except Exception as e:
             err = str(e)
             if "429" in err or "rate limit" in err.lower():
                 if attempt < max_retries - 1:
                     wait = 60
-                    console.print(f"    [yellow]Rate limit, ждём {wait}с...[/]")
+                    console.print(f"[yellow]Rate limit, ждём {wait}с...[/]")
                     time.sleep(wait)
                     continue
             raise
@@ -151,10 +149,10 @@ def _build_supervisor_tools():
 def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth: int = 0) -> str:
     agent = SUBAGENTS.get(agent_id)
     indent = "  " * depth
-    color = agent["color"] if agent else "blue"
+    color = agent["color"] if agent else "white"
     name = agent["name"] if agent else "Супервизор"
 
-    console.print(f"{indent}[bold {color}]▶ {name} получил задачу:[/] [dim]{task[:100]}...[/]")
+    console.print(f"{indent}[{color}]▶ {name} получил задачу: {task[:len(task)]}")
 
     if is_supervisor:
         working_messages = [
@@ -193,7 +191,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
         working_messages.append(msg_dict)
 
         if not msg.tool_calls:
-            console.print(f"{indent}[bold {color}]✓ {name} завершил работу[/]")
+            console.print(f"{indent}[{color}]✓ {name} завершил работу[/]")
             final_content = msg.content or ""
             if is_supervisor:
                 session_history.append({"role": "user", "content": task[:400]})

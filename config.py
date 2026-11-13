@@ -1,4 +1,6 @@
 from pathlib import Path
+from time import sleep
+
 from openai import OpenAI
 from rich.console import Console
 
@@ -10,9 +12,11 @@ try:
     api_key = key_path.read_text(encoding="utf-8").strip()
     if not api_key:
         console.print(f"[red]Файл {key_path} пустой[/]")
+        sleep(5)
         exit(1)
 except FileNotFoundError:
     console.print(f"[red]Файл не найден: {key_path}[/]")
+    sleep(5)
     exit(1)
 
 client = OpenAI(

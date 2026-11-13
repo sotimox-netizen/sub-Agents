@@ -23,7 +23,7 @@ def is_safe_path(path: Path) -> tuple[bool, str]:
 
 def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: dict):
     agent = subagents[agent_id]
-    console.print(f"    [dim]⚙️  [{agent['color']}]{tool_name}()[/]")
+    console.print(f"    [dim][{agent['color']}]{tool_name}()[/]")
 
     from duckduckgo_search import DDGS
 
