@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 from time import sleep
 
@@ -30,14 +31,30 @@ def _load_dotenv(env_path: Path) -> None:
 _project_root = Path(__file__).resolve().parents[2]
 BASE_DIR = _project_root if (_project_root / "config.json").exists() else Path.cwd().resolve()
 
+# Защита от случайной записи секрета в git: если значение похоже на
+# токен GitHub — игнорируем его (в т.ч. из .env) и просим задать LLM-ключ
+# через переменную окружения (export OPENAI_API_KEY=... / setx ...).
+_GITHUB_TOKEN_RE = r"(ghp_|github_pat_|gho_|ghu_|ghs_|ghr_)[A-Za-z0-9_]{20,}"
+
 # Загрузка секрета: сначала переменная окружения, затем .env рядом с проектом.
 _load_dotenv(BASE_DIR / ".env")
 
 api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+
+if re.search(_GITHUB_TOKEN_RE, api_key):
+    console.print(
+        "[red]В OPENAI_API_KEY обнаружен токен GitHub вместо API-ключа. "
+        "Токены GitHub нельзя хранить в репозитории — отзовите его на "
+        "github.com/settings/tokens и задайте LLM-ключ через переменную "
+        "окружения OPENAI_API_KEY.[/]"
+    )
+    api_key = ""
+
 if not api_key:
     console.print(
         "[red]API-ключ не задан. Установи переменную окружения OPENAI_API_KEY "
-        "или создай файл .env в корне проекта (см. .env.example).[/]"
+        "(безопасный способ, ничего не попадает в git) или создай файл .env "
+        "в корне проекта (он в .gitignore, см. .env.example).[/]"
     )
     sleep(5)
     exit(1)
