@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from time import sleep
 
@@ -6,25 +7,47 @@ from rich.console import Console
 
 console = Console()
 
-# Загрузка API ключа
-key_path = Path.home() / "Documents" / "blablabla.txt"
-try:
-    api_key = key_path.read_text(encoding="utf-8").strip()
-    if not api_key:
-        console.print(f"[red]Файл {key_path} пустой[/]")
-        sleep(5)
-        exit(1)
-except FileNotFoundError:
-    console.print(f"[red]Файл не найден: {key_path}[/]")
+
+def _load_dotenv(env_path: Path) -> None:
+    """Минимальный загрузчик .env (без внешних зависимостей)."""
+    if not env_path.exists():
+        return
+    try:
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, _, v = line.partition("=")
+            k, v = k.strip(), v.strip().strip('"').strip("'")
+            if k and k not in os.environ:
+                os.environ[k] = v
+    except Exception:
+        pass
+
+
+BASE_DIR = Path.cwd().resolve()
+
+# Загрузка секрета: сначала переменная окружения, затем .env рядом с проектом.
+_load_dotenv(BASE_DIR / ".env")
+
+api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+if not api_key:
+    console.print(
+        "[red]API-ключ не задан. Установи переменную окружения OPENAI_API_KEY "
+        "или создай файл .env в корне проекта (см. .env.example).[/]"
+    )
     sleep(5)
     exit(1)
 
+# ВАЖНО: base_url указывает на сторонний прокси — весь текст запросов
+# уходит третьим лицам. URL берётся из окружения, чтобы случайные
+# intermediaries (логи, скриншоты) не раскрывали endpoint.
+base_url = os.environ.get("OPENAI_BASE_URL", "https://api.aikeysforyou.com/v1")
+
 client = OpenAI(
     api_key=api_key,
-    base_url="https://api.aikeysforyou.com/v1"  # <-- URL от продавца
+    base_url=base_url,
 )
-
-BASE_DIR = Path.cwd().resolve()
 
 MAX_TOOL_RESULT_CHARS = 2500
 MAX_FILE_READ_CHARS = 3500
@@ -36,12 +59,13 @@ MAX_FILE_SIZE = 100 * 1024
 
 FORBIDDEN_PATTERNS = [
     ".env",
-    "blablabla.txt",
     ".git",
     "__pycache__",
     ".venv",
     "node_modules",
     ".idea",
+    "build",
+    "dist",
 ]
 
 console.print(f"API ключ загружен", markup=False)

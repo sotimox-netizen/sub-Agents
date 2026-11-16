@@ -1,0 +1,16 @@
+# Секреты — никогда не коммитить
+.env
+*.key
+
+# Артефакты сборки
+build/
+dist/
+
+# Кэш Python
+__pycache__/
+*.pyc
+
+# Виртуальные окружения / IDE
+.venv/
+.idea/
+agent_output/

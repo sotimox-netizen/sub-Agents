@@ -1,14 +1,9 @@
-from pathlib import Path
-from openai import OpenAI
+from openai import OpenAI  # noqa: F401  (используется в config.py)
 
-key = Path.home().joinpath("Documents", "blablabla.txt").read_text().strip()
+# Ключ берём из окружения / .env (см. config.py), а не из текстового файла.
+from config import client  # использует OPENAI_API_KEY / OPENAI_BASE_URL
 
-client = OpenAI(
-    api_key=key,
-    base_url="https://api.aikeysforyou.com/v1"
-)
-
-print("Отправляем запрос к прокси продавца...")
+print("Отправляем запрос к провайдеру...")
 
 try:
     r = client.chat.completions.create(
