@@ -1,9 +1,9 @@
 import json
 import time
 from pathlib import Path
-from config import console, client, BASE_DIR, MAX_TOOL_RESULT_CHARS, MAX_SUB_RESULT_CHARS, MAX_HISTORY_TURNS
-from memory import session_history, clip, trim_working_messages
-from tools import execute_subagent_tool
+from subagents.core.config import console, client, BASE_DIR, MAX_TOOL_RESULT_CHARS, MAX_SUB_RESULT_CHARS, MAX_HISTORY_TURNS
+from subagents.core.memory import session_history, clip, trim_working_messages
+from subagents.core.tools import execute_subagent_tool
 
 # Загрузка конфига
 CONFIG_PATH = BASE_DIR / "config.json"

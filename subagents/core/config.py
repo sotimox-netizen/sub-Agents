@@ -25,7 +25,10 @@ def _load_dotenv(env_path: Path) -> None:
         pass
 
 
-BASE_DIR = Path.cwd().resolve()
+# Корень проекта: если приложение запущено из исходников — поднимаемся
+# на два уровня от subagents/core/config.py; иначе (exe в корне) берём cwd.
+_project_root = Path(__file__).resolve().parents[2]
+BASE_DIR = _project_root if (_project_root / "config.json").exists() else Path.cwd().resolve()
 
 # Загрузка секрета: сначала переменная окружения, затем .env рядом с проектом.
 _load_dotenv(BASE_DIR / ".env")

@@ -1,7 +1,7 @@
 from openai import OpenAI  # noqa: F401  (используется в config.py)
 
 # Ключ берём из окружения / .env (см. config.py), а не из текстового файла.
-from config import client  # использует OPENAI_API_KEY / OPENAI_BASE_URL
+from subagents.core.config import client  # использует OPENAI_API_KEY / OPENAI_BASE_URL
 
 print("Отправляем запрос к провайдеру...")
 

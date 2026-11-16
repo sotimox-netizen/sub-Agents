@@ -1,8 +1,8 @@
 from rich.console import Console
 from rich.panel import Panel
 from rich.markdown import Markdown
-from agent import run_agent_loop, SUBAGENTS
-from memory import session_history
+from subagents.core.agent import run_agent_loop, SUBAGENTS
+from subagents.core.memory import session_history
 print("версия 1.3")
 
 console = Console()

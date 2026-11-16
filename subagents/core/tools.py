@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
 from ddgs import DDGS
-from config import (
+from subagents.core.config import (
     console, BASE_DIR, FORBIDDEN_PATTERNS,
     MAX_FILE_SIZE, MAX_FILE_READ_CHARS, MAX_DIR_LIST_CHARS
 )
-from pathguard import safe_join, safe_filename
-from sandbox import run_python_sandboxed
+from subagents.security.pathguard import safe_join, safe_filename
+from subagents.security.sandbox import run_python_sandboxed
 
 # Директория, в которую агенту разрешено писать файлы.
 AGENT_OUTPUT_DIR = (BASE_DIR / "agent_output").resolve()
@@ -116,7 +116,7 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
                     s = f"{size} B" if size < 1024 else f"{size/1024:.1f} KB"
                     entries.append(f"📄 {entry.name} ({s})")
             output = "\n".join(entries) if entries else "(пустая директория)"
-            from memory import clip
+            from subagents.core.memory import clip
             return {"result": clip(output, MAX_DIR_LIST_CHARS)}
         except Exception as e:
             return {"error": str(e)}
@@ -150,7 +150,7 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
                 os.close(fd)
                 raise
             content = raw.decode("utf-8", errors="replace")
-            from memory import clip
+            from subagents.core.memory import clip
             return {"result": clip(content, MAX_FILE_READ_CHARS)}
         except OSError as e:
             return {"error": f"Не удалось прочитать файл: {e.strerror or e}"}

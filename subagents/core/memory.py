@@ -1,5 +1,5 @@
 import json
-from config import console, MAX_CONTEXT_CHARS, MAX_TOOL_RESULT_CHARS
+from subagents.core.config import console, MAX_CONTEXT_CHARS, MAX_TOOL_RESULT_CHARS
 
 
 session_history = []
