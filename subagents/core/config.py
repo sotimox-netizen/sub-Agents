@@ -33,18 +33,16 @@ BASE_DIR = _project_root if (_project_root / "config.json").exists() else Path.c
 # Загрузка секрета: сначала переменная окружения, затем .env рядом с проектом.
 _load_dotenv(BASE_DIR / ".env")
 
-api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-if not api_key:
-    console.print(
-        "[red]API-ключ не задан. Установи переменную окружения OPENAI_API_KEY "
-        "или создай файл .env в корне проекта (см. .env.example).[/]"
-    )
-    sleep(5)
-    exit(1)
+key_path = Path.home() / "Documents" / "blablabla.txt"
+try:
+    api_key = key_path.read_text(encoding="utf-8").strip()
+    if not api_key:
+        console.print(f"[red]файл {key_path} пустой[/red]")
+        sleep(50)
+        exit(1)
+except FileNotFoundError:
+    console.print(f"[red] файл не найден")
 
-# ВАЖНО: base_url указывает на сторонний прокси — весь текст запросов
-# уходит третьим лицам. URL берётся из окружения, чтобы случайные
-# intermediaries (логи, скриншоты) не раскрывали endpoint.
 base_url = os.environ.get("OPENAI_BASE_URL", "https://api.aikeysforyou.com/v1")
 
 client = OpenAI(

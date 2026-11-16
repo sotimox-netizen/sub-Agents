@@ -21,7 +21,6 @@ imports:
     <a href="#_collections_abc">_collections_abc</a>
  &#8226;   <a href="#_weakrefset">_weakrefset</a>
  &#8226;   <a href="#abc">abc</a>
- &#8226;   <a href="#agent">agent</a>
  &#8226;   <a href="#anyio">anyio</a>
  &#8226;   <a href="#codecs">codecs</a>
  &#8226;   <a href="#collections">collections</a>
@@ -188,7 +187,6 @@ imports:
  &#8226;   <a href="#keyword">keyword</a>
  &#8226;   <a href="#linecache">linecache</a>
  &#8226;   <a href="#locale">locale</a>
- &#8226;   <a href="#memory">memory</a>
  &#8226;   <a href="#ntpath">ntpath</a>
  &#8226;   <a href="#openai">openai</a>
  &#8226;   <a href="#operator">operator</a>
@@ -212,6 +210,8 @@ imports:
  &#8226;   <a href="#sre_constants">sre_constants</a>
  &#8226;   <a href="#sre_parse">sre_parse</a>
  &#8226;   <a href="#stat">stat</a>
+ &#8226;   <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.memory">subagents.core.memory</a>
  &#8226;   <a href="#traceback">traceback</a>
  &#8226;   <a href="#types">types</a>
  &#8226;   <a href="#warnings">warnings</a>
@@ -4378,27 +4378,6 @@ imported by:
 </div>
 
 <div class="node">
-  <a name="agent"></a>
-  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/agent.py" type="text/plain"><tt>agent</tt></a>
-<span class="moduletype">SourceModule</span>  <div class="import">
-imports:
-    <a href="#config">config</a>
- &#8226;   <a href="#json">json</a>
- &#8226;   <a href="#memory">memory</a>
- &#8226;   <a href="#pathlib">pathlib</a>
- &#8226;   <a href="#time">time</a>
- &#8226;   <a href="#tools">tools</a>
-
-  </div>
-  <div class="import">
-imported by:
-    <a href="#main.py">main.py</a>
-
-  </div>
-
-</div>
-
-<div class="node">
   <a name="aiohttp"></a>
   <a target="code" href="" type="text/plain"><tt>aiohttp</tt></a>
 <span class="moduletype">MissingModule</span>  <div class="import">
@@ -8526,27 +8505,6 @@ imported by:
 </div>
 
 <div class="node">
-  <a name="config"></a>
-  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/config.py" type="text/plain"><tt>config</tt></a>
-<span class="moduletype">SourceModule</span>  <div class="import">
-imports:
-    <a href="#openai">openai</a>
- &#8226;   <a href="#pathlib">pathlib</a>
- &#8226;   <a href="#rich.console">rich.console</a>
- &#8226;   <a href="#time">time</a>
-
-  </div>
-  <div class="import">
-imported by:
-    <a href="#agent">agent</a>
- &#8226;   <a href="#memory">memory</a>
- &#8226;   <a href="#tools">tools</a>
-
-  </div>
-
-</div>
-
-<div class="node">
   <a name="configparser"></a>
   <a target="code" href="///C:/Users/rrrrt/AppData/Local/Programs/Python/Python314/Lib/configparser.py" type="text/plain"><tt>configparser</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -9304,7 +9262,7 @@ imported by:
  &#8226;   <a href="#ddgs.similarity">ddgs.similarity</a>
  &#8226;   <a href="#ddgs.utils">ddgs.utils</a>
  &#8226;   <a href="#main.py">main.py</a>
- &#8226;   <a href="#tools">tools</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
 
   </div>
 
@@ -19300,8 +19258,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#agent">agent</a>
- &#8226;   <a href="#ddgs.cli">ddgs.cli</a>
+    <a href="#ddgs.cli">ddgs.cli</a>
  &#8226;   <a href="#ddgs.engines.bing_images">ddgs.engines.bing_images</a>
  &#8226;   <a href="#ddgs.engines.duckduckgo_images">ddgs.engines.duckduckgo_images</a>
  &#8226;   <a href="#ddgs.engines.duckduckgo_news">ddgs.engines.duckduckgo_news</a>
@@ -19320,7 +19277,6 @@ imported by:
  &#8226;   <a href="#json.decoder">json.decoder</a>
  &#8226;   <a href="#json.encoder">json.encoder</a>
  &#8226;   <a href="#json.scanner">json.scanner</a>
- &#8226;   <a href="#memory">memory</a>
  &#8226;   <a href="#multiprocessing.resource_tracker">multiprocessing.resource_tracker</a>
  &#8226;   <a href="#openai._base_client">openai._base_client</a>
  &#8226;   <a href="#openai._streaming">openai._streaming</a>
@@ -19354,7 +19310,9 @@ imported by:
  &#8226;   <a href="#rich.json">rich.json</a>
  &#8226;   <a href="#setuptools.config._validate_pyproject.error_reporting">setuptools.config._validate_pyproject.error_reporting</a>
  &#8226;   <a href="#setuptools.msvc">setuptools.msvc</a>
- &#8226;   <a href="#tools">tools</a>
+ &#8226;   <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.memory">subagents.core.memory</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
 
   </div>
 
@@ -21973,25 +21931,6 @@ imported by:
 </div>
 
 <div class="node">
-  <a name="memory"></a>
-  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/memory.py" type="text/plain"><tt>memory</tt></a>
-<span class="moduletype">SourceModule</span>  <div class="import">
-imports:
-    <a href="#config">config</a>
- &#8226;   <a href="#json">json</a>
-
-  </div>
-  <div class="import">
-imported by:
-    <a href="#agent">agent</a>
- &#8226;   <a href="#main.py">main.py</a>
- &#8226;   <a href="#tools">tools</a>
-
-  </div>
-
-</div>
-
-<div class="node">
   <a name="mimetypes"></a>
   <a target="code" href="///C:/Users/rrrrt/AppData/Local/Programs/Python/Python314/Lib/mimetypes.py" type="text/plain"><tt>mimetypes</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -23038,8 +22977,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#config">config</a>
- &#8226;   <a href="#main.py">main.py</a>
+    <a href="#main.py">main.py</a>
  &#8226;   <a href="#openai">openai</a>
  &#8226;   <a href="#openai._base_client">openai._base_client</a>
  &#8226;   <a href="#openai._client">openai._client</a>
@@ -23193,6 +23131,7 @@ imported by:
  &#8226;   <a href="#openai.resources.webhooks.webhooks">openai.resources.webhooks.webhooks</a>
  &#8226;   <a href="#openai.types">openai.types</a>
  &#8226;   <a href="#openai.version">openai.version</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
 
   </div>
 
@@ -77426,6 +77365,9 @@ imported by:
  &#8226;   <a href="#socket">socket</a>
  &#8226;   <a href="#socketserver">socketserver</a>
  &#8226;   <a href="#ssl">ssl</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
  &#8226;   <a href="#subprocess">subprocess</a>
  &#8226;   <a href="#sysconfig">sysconfig</a>
  &#8226;   <a href="#tarfile">tarfile</a>
@@ -77970,10 +77912,8 @@ imports:
   <div class="import">
 imported by:
     <a href="#_pyrepl.terminfo">_pyrepl.terminfo</a>
- &#8226;   <a href="#agent">agent</a>
  &#8226;   <a href="#anyio._core._fileio">anyio._core._fileio</a>
  &#8226;   <a href="#click._termui_impl">click._termui_impl</a>
- &#8226;   <a href="#config">config</a>
  &#8226;   <a href="#ddgs.cli">ddgs.cli</a>
  &#8226;   <a href="#httpx._multipart">httpx._multipart</a>
  &#8226;   <a href="#httpx2._multipart">httpx2._multipart</a>
@@ -78020,7 +77960,11 @@ imported by:
  &#8226;   <a href="#setuptools.config.expand">setuptools.config.expand</a>
  &#8226;   <a href="#setuptools.discovery">setuptools.discovery</a>
  &#8226;   <a href="#setuptools.dist">setuptools.dist</a>
- &#8226;   <a href="#tools">tools</a>
+ &#8226;   <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
+ &#8226;   <a href="#subagents.security.pathguard">subagents.security.pathguard</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
  &#8226;   <a href="#zipfile._path">zipfile._path</a>
 
   </div>
@@ -92269,8 +92213,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#config">config</a>
- &#8226;   <a href="#httpx._main">httpx._main</a>
+    <a href="#httpx._main">httpx._main</a>
  &#8226;   <a href="#httpx2._main">httpx2._main</a>
  &#8226;   <a href="#main.py">main.py</a>
  &#8226;   <a href="#pydantic._internal._core_utils">pydantic._internal._core_utils</a>
@@ -92318,6 +92261,7 @@ imported by:
  &#8226;   <a href="#rich.table">rich.table</a>
  &#8226;   <a href="#rich.text">rich.text</a>
  &#8226;   <a href="#rich.traceback">rich.traceback</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
 
   </div>
 
@@ -97985,6 +97929,181 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="subagents"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/__init__.py" type="text/plain"><tt>subagents</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imported by:
+    <a href="#subagents.core">subagents.core</a>
+ &#8226;   <a href="#subagents.security">subagents.security</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.core"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/core/__init__.py" type="text/plain"><tt>subagents.core</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#subagents">subagents</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
+ &#8226;   <a href="#subagents.core.memory">subagents.core.memory</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.core.agent"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/core/agent.py" type="text/plain"><tt>subagents.core.agent</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#json">json</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#subagents.core">subagents.core</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
+ &#8226;   <a href="#subagents.core.memory">subagents.core.memory</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
+ &#8226;   <a href="#time">time</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#main.py">main.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.core.config"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/core/config.py" type="text/plain"><tt>subagents.core.config</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#openai">openai</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#rich.console">rich.console</a>
+ &#8226;   <a href="#subagents.core">subagents.core</a>
+ &#8226;   <a href="#time">time</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.memory">subagents.core.memory</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.core.memory"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/core/memory.py" type="text/plain"><tt>subagents.core.memory</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#json">json</a>
+ &#8226;   <a href="#subagents.core">subagents.core</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#main.py">main.py</a>
+ &#8226;   <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.tools">subagents.core.tools</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.core.tools"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/core/tools.py" type="text/plain"><tt>subagents.core.tools</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#ddgs">ddgs</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#subagents.core">subagents.core</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
+ &#8226;   <a href="#subagents.core.memory">subagents.core.memory</a>
+ &#8226;   <a href="#subagents.security.pathguard">subagents.security.pathguard</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#subagents.core.agent">subagents.core.agent</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.security"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/security/__init__.py" type="text/plain"><tt>subagents.security</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#subagents">subagents</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#subagents.security.pathguard">subagents.security.pathguard</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.security.pathguard"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/security/pathguard.py" type="text/plain"><tt>subagents.security.pathguard</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#subagents.security">subagents.security</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#subagents.core.tools">subagents.core.tools</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="subagents.security.sandbox"></a>
+  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/subagents/security/sandbox.py" type="text/plain"><tt>subagents.security.sandbox</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#json">json</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#subagents.security">subagents.security</a>
+ &#8226;   <a href="#subprocess">subprocess</a>
+ &#8226;   <a href="#sys">sys</a>
+ &#8226;   <a href="#tempfile">tempfile</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#subagents.core.tools">subagents.core.tools</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="subprocess"></a>
   <a target="code" href="///C:/Users/rrrrt/AppData/Local/Programs/Python/Python314/Lib/subprocess.py" type="text/plain"><tt>subprocess</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -98050,6 +98169,7 @@ imported by:
  &#8226;   <a href="#setuptools._vendor.packaging._musllinux">setuptools._vendor.packaging._musllinux</a>
  &#8226;   <a href="#setuptools._vendor.packaging.tags">setuptools._vendor.packaging.tags</a>
  &#8226;   <a href="#setuptools.installer">setuptools.installer</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
  &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#webbrowser">webbrowser</a>
 
@@ -98348,6 +98468,7 @@ imported by:
  &#8226;   <a href="#socketserver">socketserver</a>
  &#8226;   <a href="#ssl">ssl</a>
  &#8226;   <a href="#statistics">statistics</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
  &#8226;   <a href="#subprocess">subprocess</a>
  &#8226;   <a href="#sysconfig">sysconfig</a>
  &#8226;   <a href="#tarfile">tarfile</a>
@@ -98507,6 +98628,7 @@ imported by:
  &#8226;   <a href="#setuptools._distutils.util">setuptools._distutils.util</a>
  &#8226;   <a href="#setuptools._vendor.jaraco.context">setuptools._vendor.jaraco.context</a>
  &#8226;   <a href="#setuptools.installer">setuptools.installer</a>
+ &#8226;   <a href="#subagents.security.sandbox">subagents.security.sandbox</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
  &#8226;   <a href="#urllib.response">urllib.response</a>
 
@@ -98666,14 +98788,12 @@ imported by:
  &#8226;   <a href="#_pyrepl.commands">_pyrepl.commands</a>
  &#8226;   <a href="#_pyrepl.unix_console">_pyrepl.unix_console</a>
  &#8226;   <a href="#_strptime">_strptime</a>
- &#8226;   <a href="#agent">agent</a>
  &#8226;   <a href="#asyncio.base_events">asyncio.base_events</a>
  &#8226;   <a href="#asyncio.windows_events">asyncio.windows_events</a>
  &#8226;   <a href="#click._termui_impl">click._termui_impl</a>
  &#8226;   <a href="#click._winconsole">click._winconsole</a>
  &#8226;   <a href="#concurrent.futures._base">concurrent.futures._base</a>
  &#8226;   <a href="#concurrent.interpreters._queues">concurrent.interpreters._queues</a>
- &#8226;   <a href="#config">config</a>
  &#8226;   <a href="#datetime">datetime</a>
  &#8226;   <a href="#ddgs.cli">ddgs.cli</a>
  &#8226;   <a href="#ddgs.engines.bing">ddgs.engines.bing</a>
@@ -98737,10 +98857,11 @@ imported by:
  &#8226;   <a href="#setuptools.command.egg_info">setuptools.command.egg_info</a>
  &#8226;   <a href="#socketserver">socketserver</a>
  &#8226;   <a href="#ssl">ssl</a>
+ &#8226;   <a href="#subagents.core.agent">subagents.core.agent</a>
+ &#8226;   <a href="#subagents.core.config">subagents.core.config</a>
  &#8226;   <a href="#subprocess">subprocess</a>
  &#8226;   <a href="#tarfile">tarfile</a>
  &#8226;   <a href="#threading">threading</a>
- &#8226;   <a href="#tools">tools</a>
  &#8226;   <a href="#unittest.case">unittest.case</a>
  &#8226;   <a href="#unittest.runner">unittest.runner</a>
  &#8226;   <a href="#urllib.request">urllib.request</a>
@@ -98913,27 +99034,6 @@ imports:
 imported by:
     <a href="#tomllib._parser">tomllib._parser</a>
  &#8226;   <a href="#tomllib._re">tomllib._re</a>
-
-  </div>
-
-</div>
-
-<div class="node">
-  <a name="tools"></a>
-  <a target="code" href="///C:/Users/rrrrt/PycharmProjects/subAgents/tools.py" type="text/plain"><tt>tools</tt></a>
-<span class="moduletype">SourceModule</span>  <div class="import">
-imports:
-    <a href="#config">config</a>
- &#8226;   <a href="#ddgs">ddgs</a>
- &#8226;   <a href="#json">json</a>
- &#8226;   <a href="#memory">memory</a>
- &#8226;   <a href="#pathlib">pathlib</a>
- &#8226;   <a href="#time">time</a>
-
-  </div>
-  <div class="import">
-imported by:
-    <a href="#agent">agent</a>
 
   </div>
 

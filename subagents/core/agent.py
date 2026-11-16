@@ -169,7 +169,11 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
         ]
 
     tools = _build_supervisor_tools() if is_supervisor else (agent["tools"] if agent else [])
-    max_iter = 8 if is_supervisor else 8
+    max_iter = 16 if is_supervisor else 16
+
+    tool_call_counts = {}
+    tool_result_cache = {}
+    stop_reason = None
 
     for i in range(max_iter):
         working_messages = trim_working_messages(working_messages)
@@ -177,7 +181,7 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
         request_kwargs = {
             "model": "deepseek-v4-pro",
             "messages": working_messages,
-            "max_tokens": 5000,
+            "max_tokens": 5120,
         }
         if tools:
             request_kwargs["tools"] = tools
@@ -224,7 +228,41 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
                     "content": json.dumps({"error": error_msg}, ensure_ascii=False)
                 })
                 continue
+            signature = fn_name + ":" + json.dumps(
+                fn_args, sort_keys=True, ensure_ascii=False
+            )
 
+            if fn_name == "list_directory":
+                count = tool_call_counts.get(signature, 0) + 1
+                tool_call_counts[signature] = count
+
+                if count == 2:
+                    # Повторно не читаем папку: возвращаем агенту прошлый результат.
+                    payload = {
+                        "cached_result": tool_result_cache[signature],
+                        "instruction": (
+                            "Эта папка уже просмотрена. Не вызывай list_directory повторно. "
+                            "Переходи к созданию и сохранению результата."
+                        ),
+                    }
+                    working_messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": json.dumps(payload, ensure_ascii=False),
+                    })
+                    continue
+
+                if count >= 3:
+                    # Ответ на этот tool_call всё равно добавляем, чтобы закрыть вызов.
+                    working_messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": json.dumps({
+                            "error": "Остановка: list_directory повторён три раза с теми же аргументами."
+                        }, ensure_ascii=False),
+                    })
+                    stop_reason = f"Повторяется list_directory с аргументами {fn_args}"
+                    continue
             if is_supervisor and fn_name.startswith("delegate_to_"):
                 sub_id = fn_name.replace("delegate_to_", "")
                 if sub_id not in SUBAGENTS:
@@ -247,5 +285,6 @@ def run_agent_loop(agent_id: str, task: str, is_supervisor: bool = False, depth:
                     "role": "tool", "tool_call_id": tc.id,
                     "content": clip(payload, MAX_TOOL_RESULT_CHARS)
                 })
+
 
     return "[ОШИБКА: Превышен лимит итераций]"

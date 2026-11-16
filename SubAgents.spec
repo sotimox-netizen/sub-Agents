@@ -9,7 +9,7 @@ datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
 a = Analysis(
-    ['subagents/core/agent.py', 'subagents/core/config.py', 'subagents/core/memory.py', 'subagents/core/tools.py', 'subagents/security/pathguard.py', 'subagents/security/sandbox.py', 'main.py'],
+    ['main.py'],
     pathex=[],
     binaries=binaries,
     datas=datas,

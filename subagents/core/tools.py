@@ -13,7 +13,6 @@ AGENT_OUTPUT_DIR = (BASE_DIR / "agent_output").resolve()
 
 
 def is_safe_path(path: Path) -> tuple[bool, str]:
-    """Проверяет, что путь лежит внутри проекта и не ведёт к запрещённым местам."""
     try:
         resolved = path.resolve()
         if BASE_DIR not in resolved.parents and resolved != BASE_DIR:
@@ -22,7 +21,6 @@ def is_safe_path(path: Path) -> tuple[bool, str]:
         for forbidden in FORBIDDEN_PATTERNS:
             if forbidden in rel_parts or resolved.name == forbidden:
                 return False, f"Доступ к '{forbidden}' запрещён"
-        # Дополнительно защищаем файлы с секретами, даже если они лежат в проекте.
         if resolved.name in ("config.json", ".env") or resolved.name.endswith(".key"):
             return False, "Доступ к конфигурационным/секретным файлам запрещён"
         return True, "OK"
@@ -44,9 +42,6 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
             return {"error": str(e)}
 
     elif tool_name == "execute_code":
-        # Безопасность: код от LLM выполняется НЕ через exec() в основном
-        # процессе, а в изолированном дочернем процессе с таймаутом и
-        # лимитами ресурсов (см. sandbox.py).
         code = args.get("code", "")
         if not isinstance(code, str):
             return {"error": "code должен быть строкой"}
@@ -65,8 +60,6 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
         if len(code) > MAX_FILE_SIZE:
             return {"error": "Слишком большой объём данных для записи"}
 
-        # Whitelist-подход: разрешаем ТОЛЬКО простые имена файлов без
-        # каких-либо разделителей. Любые пути ('..', '/', '\', '~') — отказ.
         clean_name, err = safe_filename(filename)
         if err:
             return {"error": err}
@@ -77,8 +70,6 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
         file_path, err = safe_join(AGENT_OUTPUT_DIR, clean_name)
         if err:
             return {"error": err}
-        # Финальная проверка: реальный путь (с учётом симлинков) обязан
-        # оставаться внутри agent_output.
         try:
             real = file_path.resolve()
             if AGENT_OUTPUT_DIR not in real.parents:
@@ -88,7 +79,7 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
 
         try:
             file_path.write_text(code, encoding="utf-8")
-            console.print(f"    [green]📄 Сохранён: {file_path}[/]")
+            console.print(f"    [green]Сохранён: {file_path}[/]")
             return {"success": True, "path": str(file_path)}
         except Exception as e:
             return {"error": str(e)}
@@ -103,6 +94,7 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
             return {"error": reason}
         if not target.exists() or not target.is_dir():
             return {"error": f"Директория не найдена: {path_str}"}
+
         try:
             entries = []
             for entry in sorted(target.iterdir(), key=lambda p: (not p.is_dir(), p.name.lower())):
@@ -110,11 +102,11 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
                 if not safe_entry:
                     continue
                 if entry.is_dir():
-                    entries.append(f"📁 {entry.name}/")
+                    entries.append(f"{entry.name}/")
                 else:
                     size = entry.stat().st_size
                     s = f"{size} B" if size < 1024 else f"{size/1024:.1f} KB"
-                    entries.append(f"📄 {entry.name} ({s})")
+                    entries.append(f"{entry.name} ({s})")
             output = "\n".join(entries) if entries else "(пустая директория)"
             from subagents.core.memory import clip
             return {"result": clip(output, MAX_DIR_LIST_CHARS)}
@@ -133,8 +125,7 @@ def execute_subagent_tool(agent_id: str, tool_name: str, args: dict, subagents: 
             return {"error": reason}
         if not target.exists() or not target.is_file():
             return {"error": f"Файл не найден: {path_str}"}
-        # Читаем по открытому дескриптору (O_NOFOLLOW), чтобы между
-        # проверкой и чтением нельзя было подменить файл симлинком (TOCTOU).
+
         try:
             fd_flags = os.O_RDONLY
             if hasattr(os, "O_NOFOLLOW"):
